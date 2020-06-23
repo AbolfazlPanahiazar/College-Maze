@@ -13,13 +13,12 @@ for (let i = 1; i <= 81; i++) {
 }
 
 // ********** File reader section **********
-document.getElementById("fileInput").addEventListener("change", function () {
-  var fr = new FileReader();
-  fr.onload = function () {
-    console.log(fr.result);
-  };
+// document.getElementById("fileInput").addEventListener("change", function () {
+//   var fr = new FileReader();
+//   fr.onload = function () {
+//     console.log(fr.result);
+//   };
 
-  fr.readAsText(this.files[0]);
-});
+//   fr.readAsText(this.files[0]);
+// });
 
-console.log(table);

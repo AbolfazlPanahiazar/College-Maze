@@ -1,0 +1,24 @@
+/********** Basic stuff **********/
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+body {
+  box-sizing: border-box;
+}
+
+/*********** Layout ************/
+.container-fluid {
+    height: 100vh;
+}
+
+.file {
+    background-image: url(../images/upload\ back.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}

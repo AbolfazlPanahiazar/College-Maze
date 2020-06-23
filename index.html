@@ -23,8 +23,13 @@
         You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.
       </p>
     <![endif]-->
-    <div class="container">
-      <input type="file" id="fileInput" />
+    <div class="container-fluid file d-flex flex-column align-items-center">
+      <h1 class="text-danger my-5" style="font-size: 8rem;">Maze</h1>
+      <form class="d-flex flex-column" action="">
+        <label class="h1 text-primary" for="fileInput">Please upload the file of game in here:</label>
+        <input class="h1" type="file" id="fileInput" />
+        <button class="btn h2 btn-primary my-5">Use Default Maze</button>
+      </form>
     </div>
   </body>
 </html>
