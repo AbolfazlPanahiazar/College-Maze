@@ -69,6 +69,7 @@ document.getElementById("fileInput").addEventListener("change", function () {
 
 //********** Start button **********
 let family = [];
+let familyAges = new MinHeap();
 $("#startButton").click((e) => {
   e.preventDefault();
   if (maze.nodes[1].kind == "none") {
@@ -95,7 +96,6 @@ $("#startButton").click((e) => {
       let number = +result.value;
       // get family name and numbers
       for (let i = 0; i < number; i++) {
-        console.log(i);
         await Swal.mixin({
           input: "text",
           confirmButtonText: "Next &rarr;",
@@ -108,9 +108,14 @@ $("#startButton").click((e) => {
             `Enter age of ${i + 1} person`,
           ])
           .then((result) => {
-            console.log(result);
+            // push every family member into data structures
+            let temp = result.value;
+            family.push(temp);
+            familyAges.insert(+temp[1]);
           });
       }
+      // sort the heap
+      familyAges = familyAges.sort();
     });
   }
 });
