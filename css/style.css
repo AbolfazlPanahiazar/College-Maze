@@ -13,12 +13,26 @@ body {
 
 /*********** Layout ************/
 .container-fluid {
-    height: 100vh;
+  height: 100vh;
 }
 
 .file {
-    background-image: url(../images/upload\ back.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+  background-image: url(../images/uploadback.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.menu {
+  background-image: url(../images/menuback.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+
+.game {
+  background-image: url(../images/gameback.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
 }
