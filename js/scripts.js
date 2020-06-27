@@ -134,3 +134,23 @@ $("#startButton").click((e) => {
     });
   }
 });
+
+// render maze function
+function renderMaze() {
+  for (let i = 1; i <= 81; i++) {
+    if (maze.nodes[i].kind == "#") {
+      $(`#b${i}`).css("background-image", "url(./images/wall.jpg)");
+    } else if (maze.nodes[i].kind == "M") {
+      $(`#b${i}`).css("background-image", "url(./images/mouse.png)");
+    } else if (maze.nodes[i].kind == "C") {
+      $(`#b${i}`).css("background-image", "url(./images/cheese.png)");
+    } else if (maze.nodes[i].kind == "+") {
+      $(`#b${i}`).css("background-image", "url()");
+    }
+  }
+}
+
+// go button event listenet
+$("#goButton").click(() => {
+  renderMaze();
+});

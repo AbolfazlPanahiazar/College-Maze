@@ -29,9 +29,9 @@
     <div class="container-fluid file d-flex flex-column align-items-center">
       <h1 class="text-danger my-5" style="font-size: 8rem;">Maze</h1>
       <form class="d-flex flex-column" action="">
-        <label class="h1 text-primary" for="fileInput">Please upload the file of game in here:</label>
+        <label class="h1 text-secondary" for="fileInput">Please upload the file of game in here:</label>
         <input class="h1" type="file" id="fileInput" />
-        <button id="startButton" class="btn h2 btn-primary py-3 w-75 mt-5">Start</button>
+        <button id="startButton" class="btn h2 btn-secondary py-3 w-75 mt-5">Start</button>
         <!-- <button class="btn h2 btn-primary py-3 w-75">Use Default Maze</button> -->
       </form>
     </div>
@@ -39,15 +39,115 @@
 
     <!-- menu - start -->
     <div class="container-fluid menu d-flex flex-column justify-content-center align-items-center">
-      <button class="goButtton btn btn-success w-50 m-2 p-3">Go</button>
-      <button class="leaderboardButtton btn btn-success w-50 m-2 p-3">Leaderboard</button>
-      <button class="solveButtton btn btn-success w-50 m-2 p-3">Solve</button>
+      <button id="goButton" class="goButtton btn btn-secondary w-50 m-2 p-3">Go</button>
+      <button class="leaderboardButtton btn btn-secondary w-50 m-2 p-3">Leaderboard</button>
+      <button class="solveButtton btn btn-secondary w-50 m-2 p-3">Solve</button>
     </div>
     <!-- menu - end -->
 
     <!-- menu - start -->
     <div class="container-fluid game">
-      sdfsdf
+      <table class="maze">
+        <tr class="maze__row">
+          <td id="b1" class="maze__block"></td>
+          <td id="b2" class="maze__block"></td>
+          <td id="b3" class="maze__block"></td>
+          <td id="b4" class="maze__block"></td>
+          <td id="b5" class="maze__block"></td>
+          <td id="b6" class="maze__block"></td>
+          <td id="b7" class="maze__block"></td>
+          <td id="b8" class="maze__block"></td>
+          <td id="b9" class="maze__block"></td>
+        </tr>
+        <tr class="maze__row">
+          <td id="b10" class="maze__block"></td>
+          <td id="b11" class="maze__block"></td>
+          <td id="b12" class="maze__block"></td>
+          <td id="b13" class="maze__block"></td>
+          <td id="b14" class="maze__block"></td>
+          <td id="b15" class="maze__block"></td>
+          <td id="b16" class="maze__block"></td>
+          <td id="b17" class="maze__block"></td>
+          <td id="b18" class="maze__block"></td>
+        </tr>
+        <tr class="maze__row">
+          <td id="b19" class="maze__block"></td>
+          <td id="b20" class="maze__block"></td>
+          <td id="b21" class="maze__block"></td>
+          <td id="b22" class="maze__block"></td>
+          <td id="b23" class="maze__block"></td>
+          <td id="b24" class="maze__block"></td>
+          <td id="b25" class="maze__block"></td>
+          <td id="b26" class="maze__block"></td>
+          <td id="b27" class="maze__block"></td>
+        </tr>
+        <tr class="maze__row">
+          <td id="b28" class="maze__block"></td>
+          <td id="b29" class="maze__block"></td>
+          <td id="b30" class="maze__block"></td>
+          <td id="b31" class="maze__block"></td>
+          <td id="b32" class="maze__block"></td>
+          <td id="b33" class="maze__block"></td>
+          <td id="b34" class="maze__block"></td>
+          <td id="b35" class="maze__block"></td>
+          <td id="b36" class="maze__block"></td>
+        </tr>
+        <tr class="maze__row">
+          <td id="b37" class="maze__block"></td>
+          <td id="b38" class="maze__block"></td>
+          <td id="b39" class="maze__block"></td>
+          <td id="b40" class="maze__block"></td>
+          <td id="b41" class="maze__block"></td>
+          <td id="b42" class="maze__block"></td>
+          <td id="b43" class="maze__block"></td>
+          <td id="b44" class="maze__block"></td>
+          <td id="b45" class="maze__block"></td>
+        </tr>
+        <tr class="maze__row">
+          <td id="b46" class="maze__block"></td>
+          <td id="b47" class="maze__block"></td>
+          <td id="b48" class="maze__block"></td>
+          <td id="b49" class="maze__block"></td>
+          <td id="b50" class="maze__block"></td>
+          <td id="b51" class="maze__block"></td>
+          <td id="b52" class="maze__block"></td>
+          <td id="b53" class="maze__block"></td>
+          <td id="b54" class="maze__block"></td>
+        </tr>
+        <tr class="maze__row">
+          <td id="b55" class="maze__block"></td>
+          <td id="b56" class="maze__block"></td>
+          <td id="b57" class="maze__block"></td>
+          <td id="b58" class="maze__block"></td>
+          <td id="b59" class="maze__block"></td>
+          <td id="b60" class="maze__block"></td>
+          <td id="b61" class="maze__block"></td>
+          <td id="b62" class="maze__block"></td>
+          <td id="b63" class="maze__block"></td>
+        </tr>
+        <tr class="maze__row">
+          <td id="b64" class="maze__block"></td>
+          <td id="b65" class="maze__block"></td>
+          <td id="b66" class="maze__block"></td>
+          <td id="b67" class="maze__block"></td>
+          <td id="b68" class="maze__block"></td>
+          <td id="b69" class="maze__block"></td>
+          <td id="b70" class="maze__block"></td>
+          <td id="b71" class="maze__block"></td>
+          <td id="b72" class="maze__block"></td>
+        </tr>
+        <tr class="maze__row">
+          <td id="b73" class="maze__block"></td>
+          <td id="b74" class="maze__block"></td>
+          <td id="b75" class="maze__block"></td>
+          <td id="b76" class="maze__block"></td>
+          <td id="b77" class="maze__block"></td>
+          <td id="b78" class="maze__block"></td>
+          <td id="b79" class="maze__block"></td>
+          <td id="b80" class="maze__block"></td>
+          <td id="b81" class="maze__block"></td>
+        </tr>
+      </table>
     </div>
     <!-- menu - end -->
   </body>
