@@ -68,8 +68,9 @@ document.getElementById("fileInput").addEventListener("change", function () {
 });
 
 //********** Start button **********
-let family = [];
+let familyTemp = [];
 let familyAges = new MinHeap();
+let family = [];
 $("#startButton").click((e) => {
   e.preventDefault();
   if (maze.nodes[1].kind == "none") {
@@ -110,12 +111,26 @@ $("#startButton").click((e) => {
           .then((result) => {
             // push every family member into data structures
             let temp = result.value;
-            family.push(temp);
+            familyTemp.push(temp);
             familyAges.insert(+temp[1]);
           });
       }
       // sort the heap
       familyAges = familyAges.sort();
+      // Place family in final sorted array
+      for (let i = 0; i < familyAges.length; i++) {
+        for (let j = 0; j < familyTemp.length; j++) {
+          if (familyAges[i] == familyTemp[j][1]) {
+            family[i] = {
+              name: familyTemp[j][0],
+              age: familyTemp[j][1],
+              points: Infinity,
+            };
+            familyTemp.splice(j, 1);
+            break;
+          }
+        }
+      }
     });
   }
 });
