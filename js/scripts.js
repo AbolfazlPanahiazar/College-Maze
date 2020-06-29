@@ -12,6 +12,18 @@ for (let i = 1; i <= 81; i++) {
   maze.addVertex(new Node(i, "none"));
 }
 
+// Deep clone of objects
+function deepCloneObjects(first, second) {
+  for (key in second) {
+    if (typeof second[key] === "object") {
+      first[key] = {};
+      deepCloneObjects(first[key], second[key]);
+    } else {
+      first[key] = second[key];
+    }
+  }
+}
+
 //********** File reader section **********
 document.getElementById("fileInput").addEventListener("change", function () {
   var fr = new FileReader();
@@ -118,7 +130,9 @@ $("#startButton").click(async (e) => {
               name: familyTemp[j][0],
               age: familyTemp[j][1],
               points: Infinity,
+              maze: {},
             };
+            deepCloneObjects(family[i].maze, maze);
             familyTemp.splice(j, 1);
             break;
           }
@@ -138,15 +152,15 @@ $("#startButton").click(async (e) => {
 });
 
 // render maze function
-function renderMaze() {
+function renderMaze(theMaze) {
   for (let i = 1; i <= 81; i++) {
-    if (maze.nodes[i].kind == "#") {
+    if (theMaze.nodes[i].kind == "#") {
       $(`#b${i}`).css("background-image", "url(./images/wall.jpg)");
-    } else if (maze.nodes[i].kind == "M") {
+    } else if (theMaze.nodes[i].kind == "M") {
       $(`#b${i}`).css("background-image", "url(./images/mouse.png)");
-    } else if (maze.nodes[i].kind == "C") {
+    } else if (theMaze.nodes[i].kind == "C") {
       $(`#b${i}`).css("background-image", "url(./images/cheese.png)");
-    } else if (maze.nodes[i].kind == "+") {
+    } else if (theMaze.nodes[i].kind == "+") {
       $(`#b${i}`).css("background-image", "url()");
     }
   }
@@ -157,23 +171,86 @@ let whoseTurn = 0;
 
 // game start function
 function startGame(member) {
-  let start = new Date();
   let steps = 0;
   let finished = false;
-  document.addEventListener("keydown", function (event) {
+  let mousePosition;
+  let cheesePosition;
+  // get mouseaand cheese position in maze
+  for (let i = 1; i <= 81; i++) {
+    if (member.maze.nodes[i].kind == "M") mousePosition = i;
+    else if (member.maze.nodes[i].kind == "C") cheesePosition = i;
+  }
+  // start
+  let start = new Date();
+  document.addEventListener("keydown", async function (event) {
     if (event.keyCode != 65 && event.keyCode != 83 && event.keyCode != 68 && event.keyCode != 87) {
       member.points = "unfinished";
       whoseTurn++;
+      // check if all done or not
+      if (whoseTurn == family.length) {
+        console.log("game done");
+      } else {
+        $("#goButton").text(`Go ${family[whoseTurn].name}`);
+        // scroll down to menu
+        $([document.documentElement, document.body]).animate(
+          {
+            scrollTop: $("#menu").offset().top,
+          },
+          1000
+        );
+      }
+    } else if (event.keyCode == 87) {
+      // W
+      if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition - 9])) {
+        if (maze.nodes[mousePosition - 9].kind == "C") {
+        } else {
+          member.maze.nodes[mousePosition].kind = "+";
+          member.maze.nodes[mousePosition - 9].kind = "M";
+          mousePosition -= 9;
+          renderMaze(member.maze);
+        }
+      }
+    } else if (event.keyCode == 83) {
+      // S
+      if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 9])) {
+        if (maze.nodes[mousePosition + 9].kind == "C") {
+        } else {
+          member.maze.nodes[mousePosition].kind = "+";
+          member.maze.nodes[mousePosition + 9].kind = "M";
+          mousePosition += 9;
+          renderMaze(member.maze);
+        }
+      }
+    } else if (event.keyCode == 65) {
+      // A
+      if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition - 1])) {
+        if (maze.nodes[mousePosition - 1].kind == "C") {
+        } else {
+          member.maze.nodes[mousePosition].kind = "+";
+          member.maze.nodes[mousePosition - 1].kind = "M";
+          mousePosition--;
+          renderMaze(member.maze);
+        }
+      }
+    } else if (event.keyCode == 68) {
+      // D
+      if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 1])) {
+        if (maze.nodes[mousePosition + 1].kind == "C") {
+        } else {
+          member.maze.nodes[mousePosition].kind = "+";
+          member.maze.nodes[mousePosition + 1].kind = "M";
+          mousePosition++;
+          renderMaze(member.maze);
+        }
+      }
     }
   });
-  let end = new Date();
-  console.log(end - start);
 }
 
 // go button event listenet
 $("#goButton").click(() => {
-  renderMaze();
-  // scroll down to menu
+  renderMaze(family[whoseTurn].maze);
+  // scroll down to game
   $([document.documentElement, document.body]).animate(
     {
       scrollTop: $("#game").offset().top,
