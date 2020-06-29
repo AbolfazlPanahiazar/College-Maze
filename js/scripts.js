@@ -171,24 +171,35 @@ let whoseTurn = 0;
 
 // game start function
 function startGame(member) {
+  $(document).off();
   let steps = 0;
-  let finished = false;
   let mousePosition;
-  let cheesePosition;
   // get mouseaand cheese position in maze
   for (let i = 1; i <= 81; i++) {
     if (member.maze.nodes[i].kind == "M") mousePosition = i;
-    else if (member.maze.nodes[i].kind == "C") cheesePosition = i;
   }
   // start
   let start = new Date();
-  document.addEventListener("keydown", async function (event) {
+  $(document).keydown(async function (event) {
     if (event.keyCode != 65 && event.keyCode != 83 && event.keyCode != 68 && event.keyCode != 87) {
+      //
+      await Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Yous pressed an wrong key!",
+      });
       member.points = "unfinished";
       whoseTurn++;
       // check if all done or not
       if (whoseTurn == family.length) {
-        console.log("game done");
+        $("#goButton").hide();
+        // scroll down to menu
+        $([document.documentElement, document.body]).animate(
+          {
+            scrollTop: $("#menu").offset().top,
+          },
+          1000
+        );
       } else {
         $("#goButton").text(`Go ${family[whoseTurn].name}`);
         // scroll down to menu
@@ -202,8 +213,36 @@ function startGame(member) {
     } else if (event.keyCode == 87) {
       // W
       if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition - 9])) {
+        steps++;
         if (maze.nodes[mousePosition - 9].kind == "C") {
-        } else {
+          member.maze.nodes[mousePosition].kind = "+";
+          member.maze.nodes[mousePosition - 9].kind = "M";
+          mousePosition -= 9;
+          await Swal.fire("Congrag...", `${member.name}, you finished the game`, "success");
+          whoseTurn++;
+          let time = new Date() - start;
+          member.points = time * steps;
+          // game finished
+          if (whoseTurn == family.length) {
+            $("#goButton").hide();
+            // scroll down to menu
+            $([document.documentElement, document.body]).animate(
+              {
+                scrollTop: $("#menu").offset().top,
+              },
+              1000
+            );
+          } else {
+            $("#goButton").text(`Go ${family[whoseTurn].name}`);
+            // scroll down to menu
+            $([document.documentElement, document.body]).animate(
+              {
+                scrollTop: $("#menu").offset().top,
+              },
+              1000
+            );
+          }
+        } else if (maze.nodes[mousePosition - 9].kind == "+") {
           member.maze.nodes[mousePosition].kind = "+";
           member.maze.nodes[mousePosition - 9].kind = "M";
           mousePosition -= 9;
@@ -213,8 +252,36 @@ function startGame(member) {
     } else if (event.keyCode == 83) {
       // S
       if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 9])) {
+        steps++;
         if (maze.nodes[mousePosition + 9].kind == "C") {
-        } else {
+          member.maze.nodes[mousePosition].kind = "+";
+          member.maze.nodes[mousePosition + 9].kind = "M";
+          mousePosition += 9;
+          await Swal.fire("Congrag...", `${member.name}, you finished the game`, "success");
+          whoseTurn++;
+          let time = new Date() - start;
+          member.points = time * steps;
+          // game finished
+          if (whoseTurn == family.length) {
+            $("#goButton").hide();
+            // scroll down to menu
+            $([document.documentElement, document.body]).animate(
+              {
+                scrollTop: $("#menu").offset().top,
+              },
+              1000
+            );
+          } else {
+            $("#goButton").text(`Go ${family[whoseTurn].name}`);
+            // scroll down to menu
+            $([document.documentElement, document.body]).animate(
+              {
+                scrollTop: $("#menu").offset().top,
+              },
+              1000
+            );
+          }
+        } else if (maze.nodes[mousePosition + 9].kind == "+") {
           member.maze.nodes[mousePosition].kind = "+";
           member.maze.nodes[mousePosition + 9].kind = "M";
           mousePosition += 9;
@@ -224,8 +291,36 @@ function startGame(member) {
     } else if (event.keyCode == 65) {
       // A
       if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition - 1])) {
+        steps++;
         if (maze.nodes[mousePosition - 1].kind == "C") {
-        } else {
+          member.maze.nodes[mousePosition].kind = "+";
+          member.maze.nodes[mousePosition - 1].kind = "M";
+          mousePosition--;
+          await Swal.fire("Congrag...", `${member.name}, you finished the game`, "success");
+          whoseTurn++;
+          let time = new Date() - start;
+          member.points = time * steps;
+          // game finished
+          if (whoseTurn == family.length) {
+            $("#goButton").hide();
+            // scroll down to menu
+            $([document.documentElement, document.body]).animate(
+              {
+                scrollTop: $("#menu").offset().top,
+              },
+              1000
+            );
+          } else {
+            $("#goButton").text(`Go ${family[whoseTurn].name}`);
+            // scroll down to menu
+            $([document.documentElement, document.body]).animate(
+              {
+                scrollTop: $("#menu").offset().top,
+              },
+              1000
+            );
+          }
+        } else if (maze.nodes[mousePosition - 1].kind == "+") {
           member.maze.nodes[mousePosition].kind = "+";
           member.maze.nodes[mousePosition - 1].kind = "M";
           mousePosition--;
@@ -235,8 +330,36 @@ function startGame(member) {
     } else if (event.keyCode == 68) {
       // D
       if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 1])) {
+        steps++;
         if (maze.nodes[mousePosition + 1].kind == "C") {
-        } else {
+          member.maze.nodes[mousePosition].kind = "+";
+          member.maze.nodes[mousePosition + 1].kind = "M";
+          mousePosition++;
+          await Swal.fire("Congrag...", `${member.name}, you finished the game`, "success");
+          whoseTurn++;
+          let time = new Date() - start;
+          member.points = time * steps;
+          // game finished
+          if (whoseTurn == family.length) {
+            $("#goButton").hide();
+            // scroll down to menu
+            $([document.documentElement, document.body]).animate(
+              {
+                scrollTop: $("#menu").offset().top,
+              },
+              1000
+            );
+          } else {
+            $("#goButton").text(`Go ${family[whoseTurn].name}`);
+            // scroll down to menu
+            $([document.documentElement, document.body]).animate(
+              {
+                scrollTop: $("#menu").offset().top,
+              },
+              1000
+            );
+          }
+        } else if (maze.nodes[mousePosition + 1].kind == "+") {
           member.maze.nodes[mousePosition].kind = "+";
           member.maze.nodes[mousePosition + 1].kind = "M";
           mousePosition++;
