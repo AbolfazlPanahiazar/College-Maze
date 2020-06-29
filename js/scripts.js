@@ -71,25 +71,18 @@ document.getElementById("fileInput").addEventListener("change", function () {
 let familyTemp = [];
 let familyAges = new MinHeap();
 let family = [];
-$("#startButton").click((e) => {
+$("#startButton").click(async (e) => {
   e.preventDefault();
   if (maze.nodes[1].kind == "none") {
-    Swal.fire({
+    await Swal.fire({
       icon: "error",
       title: "Oops...",
       text: "Please upload maze file!",
     });
   } else {
-    // scroll down to menu
-    $([document.documentElement, document.body]).animate(
-      {
-        scrollTop: $(".menu").offset().top,
-      },
-      1000
-    );
     // getting family numbers
-    Swal.fire({
-      input: "text",
+    await Swal.fire({
+      input: "number",
       confirmButtonText: "Next &rarr;",
       showCancelButton: true,
       title: "How many are you?",
@@ -131,7 +124,16 @@ $("#startButton").click((e) => {
           }
         }
       }
+      $("#goButton").text(`Go ${family[whoseTurn].name}`);
     });
+
+    // scroll down to menu
+    $([document.documentElement, document.body]).animate(
+      {
+        scrollTop: $("#menu").offset().top,
+      },
+      1000
+    );
   }
 });
 
@@ -150,7 +152,33 @@ function renderMaze() {
   }
 }
 
+// turn thing
+let whoseTurn = 0;
+
+// game start function
+function startGame(member) {
+  let start = new Date();
+  let steps = 0;
+  let finished = false;
+  document.addEventListener("keydown", function (event) {
+    if (event.keyCode != 65 && event.keyCode != 83 && event.keyCode != 68 && event.keyCode != 87) {
+      member.points = "unfinished";
+      whoseTurn++;
+    }
+  });
+  let end = new Date();
+  console.log(end - start);
+}
+
 // go button event listenet
 $("#goButton").click(() => {
   renderMaze();
+  // scroll down to menu
+  $([document.documentElement, document.body]).animate(
+    {
+      scrollTop: $("#game").offset().top,
+    },
+    1000
+  );
+  startGame(family[whoseTurn]);
 });
