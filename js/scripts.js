@@ -382,3 +382,46 @@ $("#goButton").click(() => {
   );
   startGame(family[whoseTurn]);
 });
+
+// ********** leader bord button **********
+$("#leaderBoard").click(async function () {
+  let html = family.reduce((sum, item, index) => {
+    return sum + `<tr><td>${item.name}</td><td> : </td><td>${item.points}</td></tr><br/>`;
+  }, "");
+  await Swal.fire({
+    title: "<strong>Leader board</strong>",
+    icon: "info",
+    html: html,
+    focusConfirm: false,
+    confirmButtonText: '<i class="fa fa-thumbs-up"></i> Great!',
+    confirmButtonAriaLabel: "Thumbs up, great!",
+    cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+    cancelButtonAriaLabel: "Thumbs down",
+  });
+  // check for laste winner
+  let smallet = Infinity;
+  let numberW;
+  if (whoseTurn == family.length) {
+    for (let i = 0; i < family.length; i++) {
+      if (typeof family[i].points == "number" && family[i].points < smallet) {
+        smallet = family[i].points;
+        numberW = i;
+      } else if (typeof family[i].points == "string") {
+      }
+    }
+  }
+
+  if (smallet == Infinity) {
+    await Swal.fire({
+      icon: "info",
+      title: "No one won!",
+      showConfirmButton: false,
+    });
+  } else {
+    await Swal.fire({
+      icon: "success",
+      title: `${family[numberW].name} Won the game`,
+      showConfirmButton: false,
+    });
+  }
+});
