@@ -151,6 +151,116 @@ $("#startButton").click(async (e) => {
   }
 });
 
+//********** default button **********
+familyTemp = [];
+familyAges = new MinHeap();
+family = [];
+$("#default").click(async (e) => {
+  e.preventDefault();
+
+  // make maze
+  let string = `0+###++#+C##++#+#++++++#+#+#++++++++#+##++++##++++++######++++########+++M++++++++`;
+  for (let i = 1; i <= 81; i++) {
+    maze.nodes[i].kind = string[i];
+  }
+  // Add edges
+  for (let i = 1; i <= 81; i++) {
+    if (maze.nodes[i].kind != "#") {
+      if (i == 1) {
+        if (maze.nodes[i + 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 1]);
+        if (maze.nodes[i + 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 9]);
+      } else if (i >= 2 && i <= 8) {
+        // if (maze.nodes[i - 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 1]);
+        if (maze.nodes[i + 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 1]);
+        if (maze.nodes[i + 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 9]);
+      } else if (i == 9) {
+        // if (maze.nodes[i - 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 1]);
+        if (maze.nodes[i + 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 9]);
+      } else if (i == 10 || i == 19 || i == 28 || i == 37 || i == 46 || i == 55 || i == 64) {
+        // if (maze.nodes[i - 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 9]);
+        if (maze.nodes[i + 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 1]);
+        if (maze.nodes[i + 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 9]);
+      } else if (i == 18 || i == 27 || i == 36 || i == 45 || i == 54 || i == 63 || i == 72) {
+        // if (maze.nodes[i - 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 9]);
+        // if (maze.nodes[i - 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 1]);
+        if (maze.nodes[i + 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 9]);
+      } else if (i == 73) {
+        // if (maze.nodes[i - 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 9]);
+        if (maze.nodes[i + 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 1]);
+      } else if (i >= 74 && i <= 80) {
+        // if (maze.nodes[i - 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 9]);
+        // if (maze.nodes[i - 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 1]);
+        if (maze.nodes[i + 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 1]);
+      } else if (i == 81) {
+        // if (maze.nodes[i - 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 9]);
+        // if (maze.nodes[i - 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 1]);
+      } else {
+        // if (maze.nodes[i - 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 9]);
+        // if (maze.nodes[i - 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i - 1]);
+        if (maze.nodes[i + 1].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 1]);
+        if (maze.nodes[i + 9].kind != "#") maze.addEdge(maze.nodes[i], maze.nodes[i + 9]);
+      }
+    }
+  }
+
+  // getting family numbers
+  await Swal.fire({
+    input: "number",
+    confirmButtonText: "Next &rarr;",
+    showCancelButton: true,
+    title: "How many are you?",
+  }).then(async (result) => {
+    let number = +result.value;
+    // get family name and numbers
+    for (let i = 0; i < number; i++) {
+      await Swal.mixin({
+        input: "text",
+        confirmButtonText: "Next &rarr;",
+        progressSteps: ["1", "2"],
+      })
+        .queue([
+          {
+            title: `Enter name of ${i + 1} person`,
+          },
+          `Enter age of ${i + 1} person`,
+        ])
+        .then((result) => {
+          // push every family member into data structures
+          let temp = result.value;
+          familyTemp.push(temp);
+          familyAges.insert(+temp[1]);
+        });
+    }
+    // sort the heap
+    familyAges = familyAges.sort();
+    // Place family in final sorted array
+    for (let i = 0; i < familyAges.length; i++) {
+      for (let j = 0; j < familyTemp.length; j++) {
+        if (familyAges[i] == familyTemp[j][1]) {
+          family[i] = {
+            name: familyTemp[j][0],
+            age: familyTemp[j][1],
+            points: Infinity,
+            maze: {},
+          };
+          deepCloneObjects(family[i].maze, maze);
+          familyTemp.splice(j, 1);
+          break;
+        }
+      }
+    }
+    $("#goButton").text(`Go ${family[whoseTurn].name}`);
+  });
+
+  // scroll down to menu
+  $([document.documentElement, document.body]).animate(
+    {
+      scrollTop: $("#menu").offset().top,
+    },
+    1000
+  );
+});
+
 // render maze function
 function renderMaze(theMaze) {
   for (let i = 1; i <= 81; i++) {
@@ -477,7 +587,6 @@ $("#solve").click(async () => {
       }
     } else if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 1]) && theMaze.nodes[mousePosition + 1].kind != "G") {
       if (maze.nodes[mousePosition + 1].kind == "C") {
-        console.log(stack);
         theMaze.nodes[mousePosition].kind = "G";
         theMaze.nodes[mousePosition + 1].kind = "M";
         mousePosition++;
