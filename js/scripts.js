@@ -159,8 +159,13 @@ function renderMaze(theMaze) {
     } else if (theMaze.nodes[i].kind == "M") {
       $(`#b${i}`).css("background-image", "url(./images/mouse.png)");
     } else if (theMaze.nodes[i].kind == "C") {
+      $(`#b${i}`).css("background-color", "#cac7c7");
       $(`#b${i}`).css("background-image", "url(./images/cheese.png)");
     } else if (theMaze.nodes[i].kind == "+") {
+      $(`#b${i}`).css("background-color", "#cac7c7");
+      $(`#b${i}`).css("background-image", "url()");
+    } else if (theMaze.nodes[i].kind == "G") {
+      $(`#b${i}`).css("background-color", "#ccccee");
       $(`#b${i}`).css("background-image", "url()");
     }
   }
@@ -425,3 +430,209 @@ $("#leaderBoard").click(async function () {
     });
   }
 });
+
+// ********** solve button **********
+$("#solve").click(async () => {
+  let theMaze = {};
+  deepCloneObjects(theMaze, maze);
+
+  let mousePosition;
+  // get mouse position in maze
+  for (let i = 1; i <= 81; i++) {
+    if (theMaze.nodes[i].kind == "M") mousePosition = i;
+  }
+  // scrll to game
+  $([document.documentElement, document.body]).animate(
+    {
+      scrollTop: $("#game").offset().top,
+    },
+    1000
+  );
+  renderMaze(theMaze);
+
+  let stack = new Stack(81);
+
+  let intervalCode = await setInterval(() => {
+    if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition - 9]) && theMaze.nodes[mousePosition - 9].kind != "G") {
+      if (maze.nodes[mousePosition - 9].kind == "C") {
+        theMaze.nodes[mousePosition].kind = "G";
+        theMaze.nodes[mousePosition - 9].kind = "M";
+        mousePosition -= 9;
+        renderMaze(theMaze);
+        $([document.documentElement, document.body]).animate(
+          {
+            scrollTop: $("#menu").offset().top,
+          },
+          1000
+        );
+        clearInterval(intervalCode);
+        renderMaze(maze);
+        return;
+      } else if (theMaze.nodes[mousePosition - 9].kind == "+") {
+        stack.push(theMaze.nodes[mousePosition]);
+        theMaze.nodes[mousePosition].kind = "G";
+        theMaze.nodes[mousePosition - 9].kind = "M";
+        mousePosition -= 9;
+        renderMaze(theMaze);
+      }
+    } else if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 1]) && theMaze.nodes[mousePosition + 1].kind != "G") {
+      if (maze.nodes[mousePosition + 1].kind == "C") {
+        console.log(stack);
+        theMaze.nodes[mousePosition].kind = "G";
+        theMaze.nodes[mousePosition + 1].kind = "M";
+        mousePosition++;
+        renderMaze(theMaze);
+        $([document.documentElement, document.body]).animate(
+          {
+            scrollTop: $("#menu").offset().top,
+          },
+          1000
+        );
+        clearInterval(intervalCode);
+        renderMaze(maze);
+        return;
+      } else if (theMaze.nodes[mousePosition + 1].kind == "+") {
+        stack.push(theMaze.nodes[mousePosition]);
+        theMaze.nodes[mousePosition].kind = "G";
+        theMaze.nodes[mousePosition + 1].kind = "M";
+        mousePosition++;
+        renderMaze(theMaze);
+      }
+    } else if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition - 1]) && theMaze.nodes[mousePosition - 1].kind != "G") {
+      if (maze.nodes[mousePosition - 1].kind == "C") {
+        theMaze.nodes[mousePosition].kind = "G";
+        theMaze.nodes[mousePosition - 1].kind = "M";
+        mousePosition--;
+        renderMaze(theMaze);
+        $([document.documentElement, document.body]).animate(
+          {
+            scrollTop: $("#menu").offset().top,
+          },
+          1000
+        );
+        clearInterval(intervalCode);
+        renderMaze(maze);
+        return;
+      } else if (theMaze.nodes[mousePosition - 1].kind == "+") {
+        stack.push(theMaze.nodes[mousePosition]);
+        theMaze.nodes[mousePosition].kind = "G";
+        theMaze.nodes[mousePosition - 1].kind = "M";
+        mousePosition--;
+        renderMaze(theMaze);
+      }
+    } else if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 9]) && theMaze.nodes[mousePosition + 9].kind != "G") {
+      if (maze.nodes[mousePosition + 9].kind == "C") {
+        theMaze.nodes[mousePosition].kind = "G";
+        theMaze.nodes[mousePosition + 9].kind = "M";
+        mousePosition += 9;
+        renderMaze(theMaze);
+        $([document.documentElement, document.body]).animate(
+          {
+            scrollTop: $("#menu").offset().top,
+          },
+          1000
+        );
+        clearInterval(intervalCode);
+        renderMaze(maze);
+        return;
+      } else if (theMaze.nodes[mousePosition + 9].kind == "+") {
+        stack.push(theMaze.nodes[mousePosition]);
+        theMaze.nodes[mousePosition].kind = "G";
+        theMaze.nodes[mousePosition + 9].kind = "M";
+        mousePosition += 9;
+        renderMaze(theMaze);
+      }
+    } else {
+      // none of up sates didn't work
+      let last = stack.pop();
+      theMaze.nodes[mousePosition].kind = "G";
+      theMaze.nodes[+last.number].kind = "M";
+      mousePosition = +last.number;
+      renderMaze(theMaze);
+    }
+    //
+  }, 500);
+});
+
+// ************************************************
+// ************************************************
+// ************************************************
+// ************************************************
+// Operation
+function rightOperation() {
+  if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 1])) {
+    if (maze.nodes[mousePosition + 1].kind == "C") {
+      theMaze.nodes[mousePosition].kind = "G";
+      theMaze.nodes[mousePosition + 1].kind = "M";
+      mousePosition++;
+      renderMaze(theMaze);
+      $([document.documentElement, document.body]).animate(
+        {
+          scrollTop: $("#menu").offset().top,
+        },
+        1000
+      );
+      clearInterval(intervalCode);
+      renderMaze(maze);
+      return;
+    } else if (theMaze.nodes[mousePosition + 1].kind == "+") {
+      theMaze.nodes[mousePosition].kind = "G";
+      theMaze.nodes[mousePosition + 1].kind = "M";
+      mousePosition++;
+      renderMaze(theMaze);
+    } else if (theMaze.nodes[mousePosition + 1].kind == "G") {
+    }
+  }
+}
+
+function leftOperation() {
+  if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition - 1])) {
+    if (maze.nodes[mousePosition - 1].kind == "C") {
+      theMaze.nodes[mousePosition].kind = "G";
+      theMaze.nodes[mousePosition - 1].kind = "M";
+      mousePosition--;
+      renderMaze(theMaze);
+      $([document.documentElement, document.body]).animate(
+        {
+          scrollTop: $("#menu").offset().top,
+        },
+        1000
+      );
+      clearInterval(intervalCode);
+      renderMaze(maze);
+      return;
+    } else if (theMaze.nodes[mousePosition - 1].kind == "+") {
+      theMaze.nodes[mousePosition].kind = "G";
+      theMaze.nodes[mousePosition - 1].kind = "M";
+      mousePosition--;
+      renderMaze(theMaze);
+    } else if (theMaze.nodes[mousePosition - 1].kind == "G") {
+    }
+  }
+}
+
+function bottomOperation() {
+  if (maze.AdjList.get(maze.nodes[mousePosition]).includes(maze.nodes[mousePosition + 9])) {
+    if (maze.nodes[mousePosition + 9].kind == "C") {
+      theMaze.nodes[mousePosition].kind = "G";
+      theMaze.nodes[mousePosition + 9].kind = "M";
+      mousePosition += 9;
+      renderMaze(theMaze);
+      $([document.documentElement, document.body]).animate(
+        {
+          scrollTop: $("#menu").offset().top,
+        },
+        1000
+      );
+      clearInterval(intervalCode);
+      renderMaze(maze);
+      return;
+    } else if (theMaze.nodes[mousePosition + 9].kind == "+") {
+      theMaze.nodes[mousePosition].kind = "G";
+      theMaze.nodes[mousePosition + 9].kind = "M";
+      mousePosition += 9;
+      renderMaze(theMaze);
+    } else if (theMaze.nodes[mousePosition + 9].kind == "G") {
+    }
+  }
+}
